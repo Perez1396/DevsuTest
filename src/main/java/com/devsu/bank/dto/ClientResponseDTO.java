@@ -1,15 +1,14 @@
-package com.devsu.bank.model;
+package com.devsu.bank.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
 @Setter
-public class Person {
+public class ClientResponseDTO {
+    private String password;
+    private String state;
     private String name;
-    private String gender;
-    private String age;
     private String address;
     private String phone;
 }
