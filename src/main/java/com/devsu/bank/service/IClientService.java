@@ -6,4 +6,7 @@ import com.devsu.bank.dto.ClientResponseDTO;
 public interface IClientService {
 
     ClientResponseDTO createClient(ClientRequestDTO clientRequestDTO);
+    ClientResponseDTO getClientById(Integer idClient);
+    void deleteClientByID(Integer idClient);
+    ClientResponseDTO patchClient(Integer idClient, ClientRequestDTO clientRequestDTO);
 }

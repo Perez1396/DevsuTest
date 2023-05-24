@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.devsu.bank.utils.ClientConstants.NO_RECORDS_FOUND;
 import static com.devsu.bank.utils.ClientConstants.PATH_CLIENT_ID;
 
 @RestController
@@ -26,31 +27,37 @@ public class ClientController implements IClientController {
     @Override
     @GetMapping(PATH_CLIENT_ID)
     public ResponseEntity<?> getClientById (@PathVariable Integer idClient) {
-        return null;
+        ClientResponseDTO clientResponseDTO = clientService.getClientById(idClient);
+        if (clientResponseDTO == null) {
+            return new ResponseEntity<>(NO_RECORDS_FOUND, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
     }
 
     @Override
     @PostMapping
     public ResponseEntity<?> createClient(@RequestBody ClientRequestDTO clientRequestDTO) {
         ClientResponseDTO clientResponseDTO = clientService.createClient(clientRequestDTO);
-        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
+        return new ResponseEntity<>(clientResponseDTO, HttpStatus.CREATED);
     }
 
     @Override
     @DeleteMapping(PATH_CLIENT_ID)
     public ResponseEntity<?> deleteClientById (@PathVariable Integer idClient) {
-        return null;
+        clientService.deleteClientByID(idClient);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
     @PutMapping(PATH_CLIENT_ID)
-    public ResponseEntity<?> updateClient (@PathVariable Integer idClient, @RequestBody ClientRequestDTO clientRequestDTO) {
+    public ResponseEntity<?> putClient (@PathVariable Integer idClient, @RequestBody ClientRequestDTO clientRequestDTO) {
         return null;
     }
 
     @Override
     @PatchMapping(PATH_CLIENT_ID)
-    public ResponseEntity<?> updateDataFromClient (@PathVariable Integer idClient, @RequestBody ClientRequestDTO clientRequestDTO) {
-        return null;
+    public ResponseEntity<?> patchClient (@PathVariable Integer idClient, @RequestBody ClientRequestDTO clientRequestDTO) {
+        ClientResponseDTO clientResponseDTO = clientService.createClient(clientRequestDTO);
+        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
     }
 }

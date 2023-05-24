@@ -20,7 +20,7 @@ public interface IClientController {
 
     ResponseEntity<?> deleteClientById(Integer idClient);
 
-    ResponseEntity<?> updateClient(Integer idClient, ClientRequestDTO clientRequestDTO);
+    ResponseEntity<?> putClient(Integer idClient, ClientRequestDTO clientRequestDTO);
 
-    ResponseEntity<?> updateDataFromClient(Integer idClient, ClientRequestDTO clientRequestDTO);
+    ResponseEntity<?> patchClient(Integer idClient, ClientRequestDTO clientRequestDTO);
 }

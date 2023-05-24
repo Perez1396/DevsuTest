@@ -20,4 +20,35 @@ public class ClientServiceImpl implements IClientService {
         Client client = modelMapper.map(clientRequestDTO, Client.class);
         return modelMapper.map(clientRepository.save(client), ClientResponseDTO.class);
     }
+
+    @Override
+    public ClientResponseDTO getClientById(Integer idClient) {
+        ModelMapper modelMapper = new ModelMapper();
+        return clientRepository.findById(idClient)
+                .map(client -> modelMapper.map(client, ClientResponseDTO.class))
+                .orElse(null);
+    }
+
+    @Override
+    public void deleteClientByID(Integer idClient) {
+        ClientResponseDTO clientResponseDTO = getClientById(idClient);
+        if (clientResponseDTO != null){
+            clientRepository.deleteById(idClient);
+        }
+    }
+
+    @Override
+    public ClientResponseDTO patchClient(Integer idClient, ClientRequestDTO clientRequestDTO) {
+        ModelMapper modelMapper = new ModelMapper();
+        ClientResponseDTO clientResponseDTO = getClientById(idClient);
+        if (clientResponseDTO != null){
+            clientResponseDTO.setAddress(clientRequestDTO.getAddress());
+            clientResponseDTO.setName(clientRequestDTO.getName());
+            clientResponseDTO.setState(clientRequestDTO.getState());
+            clientResponseDTO.setPhone(clientRequestDTO.getPhone());
+            clientResponseDTO.setPassword(clientRequestDTO.getPassword());
+            clientRepository.save(modelMapper.map(clientResponseDTO, Client.class));
+        }
+        return clientResponseDTO;
+    }
 }
