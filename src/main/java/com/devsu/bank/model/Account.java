@@ -37,7 +37,7 @@ public class Account {
     private String state;
 
     @ManyToOne
-    @JoinColumn(name = "idCliente")
+    @JoinColumn(name = "clienteId")
     private Client client;
 
 }

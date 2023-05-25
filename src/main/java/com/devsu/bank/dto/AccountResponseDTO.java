@@ -23,5 +23,5 @@ public class AccountResponseDTO {
     @JsonProperty("cliente")
     private Client client;
     @JsonProperty("movimientos")
-    private List<Movements> movementsList;
+    private List<MovementResponseDTO> movementsList;
 }

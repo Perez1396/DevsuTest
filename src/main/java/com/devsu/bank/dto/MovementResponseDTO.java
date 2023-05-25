@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class MovementResponseDTO {
+    private Integer id;
     @JsonProperty("tipoMovimiento")
     private String movementType;
     @JsonProperty("saldo")

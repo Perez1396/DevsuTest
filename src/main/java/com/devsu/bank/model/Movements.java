@@ -38,6 +38,6 @@ public class Movements {
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "idCliente")
+    @JoinColumn(name = "idCuenta")
     private Account account;
 }

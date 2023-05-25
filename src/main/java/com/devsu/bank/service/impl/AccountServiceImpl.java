@@ -9,6 +9,7 @@ import com.devsu.bank.model.Movements;
 import com.devsu.bank.repository.AccountRepository;
 import com.devsu.bank.service.IAccountService;
 import com.devsu.bank.service.IClientService;
+import com.devsu.bank.service.IMovementService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,13 +23,16 @@ public class AccountServiceImpl implements IAccountService {
 
     @Autowired
     IClientService clientService;
+    @Autowired
+    IMovementService movementService;
 
     @Override
     public AccountResponseDTO createAccount(AccountRequestDTO accountRequestDTO) {
         ModelMapper modelMapper = new ModelMapper();
-        Client client = modelMapper.map(clientService.getClientById(accountRequestDTO.getClientId()), Client.class);
         Account account = modelMapper.map(accountRequestDTO, Account.class);
+        Client client = modelMapper.map(clientService.getClientById(accountRequestDTO.getClientId()), Client.class);
         account.setClient(client);
+        account.setId(null);
         return modelMapper.map(accountRepository.save(account), AccountResponseDTO.class);
     }
 
@@ -36,7 +40,11 @@ public class AccountServiceImpl implements IAccountService {
     public AccountResponseDTO getAccountById(Integer accountId) {
         ModelMapper modelMapper = new ModelMapper();
         return accountRepository.findById(accountId)
-                .map(account -> modelMapper.map(account, AccountResponseDTO.class))
+                .map(account -> {
+                    AccountResponseDTO accountResponseDTO = modelMapper.map(account, AccountResponseDTO.class);
+                    accountResponseDTO.setMovementsList(movementService.getAllMovementsByAccountId(accountId));
+                    return accountResponseDTO;
+                })
                 .orElse(null);
     }
 

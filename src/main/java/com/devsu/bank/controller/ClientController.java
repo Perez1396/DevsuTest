@@ -31,10 +31,7 @@ public class ClientController implements IClientController {
     @GetMapping(PATH_CLIENT_ID)
     public ResponseEntity<?> getClientById (@PathVariable Integer idClient) {
         ClientResponseDTO clientResponseDTO = clientService.getClientById(idClient);
-        if (clientResponseDTO == null) {
-            return new ResponseEntity<>(NO_RECORDS_FOUND, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
+        return clientResponseDTO == null ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(NO_RECORDS_FOUND) : ResponseEntity.ok(clientResponseDTO);
     }
 
     @Override

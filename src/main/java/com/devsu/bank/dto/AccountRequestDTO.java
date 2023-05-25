@@ -16,6 +16,6 @@ public class AccountRequestDTO {
     private Integer initialBalance;
     @JsonProperty("estado")
     private String state;
-    @JsonProperty("idCliente")
+    @JsonProperty("clienteId")
     private Integer clientId;
 }
