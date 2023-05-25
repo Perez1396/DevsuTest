@@ -1,13 +1,8 @@
 package com.devsu.bank.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
 
-@Getter
-@Setter
-public class ClientResponseDTO {
-    private Integer id;
+public class ClienteUpdateDTO {
     @JsonProperty("contraseña")
     private String password;
     @JsonProperty("estado")

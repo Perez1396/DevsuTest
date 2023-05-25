@@ -57,7 +57,7 @@ public class ClientController implements IClientController {
     @Override
     @PatchMapping(PATH_CLIENT_ID)
     public ResponseEntity<?> patchClient (@PathVariable Integer idClient, @RequestBody ClientRequestDTO clientRequestDTO) {
-        ClientResponseDTO clientResponseDTO = clientService.createClient(clientRequestDTO);
+        ClientResponseDTO clientResponseDTO = clientService.patchClient(idClient, clientRequestDTO);
         return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
     }
 }

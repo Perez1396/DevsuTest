@@ -28,4 +28,21 @@ public class AccountServiceImpl implements IAccountService {
         account.setClient(client);
         return modelMapper.map(accountRepository.save(account), AccountResponseDTO.class);
     }
+
+    @Override
+    public AccountResponseDTO getAccountById(Integer accountId) {
+        ModelMapper modelMapper = new ModelMapper();
+        return accountRepository.findById(accountId)
+                .map(account -> modelMapper.map(account, AccountResponseDTO.class))
+                .orElse(null);
+    }
+
+    @Override
+    public AccountResponseDTO patchAccount(Integer accountId, AccountRequestDTO accountRequestDTO) {
+        ModelMapper modelMapper = new ModelMapper();
+        AccountResponseDTO accountResponseDTO = getAccountById(accountId);
+        if (accountResponseDTO != null){
+        }
+        return accountResponseDTO;
+    }
 }

@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AccountResponseDTO {
+    private Integer id;
     @JsonProperty("numeroCuenta")
     private Long accountNumber;
     @JsonProperty("tipo")
