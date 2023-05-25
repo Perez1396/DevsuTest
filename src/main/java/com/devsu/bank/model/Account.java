@@ -30,7 +30,7 @@ public class Account {
 
     @NotNull
     @Column(name = "saldoInicial")
-    private String initialBalance;
+    private Integer initialBalance;
 
     @NotNull
     @Column(name = "estado")

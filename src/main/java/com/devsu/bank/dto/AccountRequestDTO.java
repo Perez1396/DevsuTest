@@ -13,7 +13,7 @@ public class AccountRequestDTO {
     @JsonProperty("tipo")
     private String accountType;
     @JsonProperty("saldoInicial")
-    private String initialBalance;
+    private Integer initialBalance;
     @JsonProperty("estado")
     private String state;
     @JsonProperty("idCliente")

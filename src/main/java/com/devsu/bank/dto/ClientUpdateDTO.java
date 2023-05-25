@@ -2,7 +2,7 @@ package com.devsu.bank.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ClienteUpdateDTO {
+public class ClientUpdateDTO {
     @JsonProperty("contraseña")
     private String password;
     @JsonProperty("estado")

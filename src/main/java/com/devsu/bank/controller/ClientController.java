@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.devsu.bank.utils.ClientConstants.NO_RECORDS_FOUND;
 import static com.devsu.bank.utils.ClientConstants.PATH_CLIENT_ID;
 
@@ -21,7 +23,8 @@ public class ClientController implements IClientController {
     @Override
     @GetMapping
     public ResponseEntity<?> getClients() {
-        return null;
+        List<ClientResponseDTO> clientResponseDTO = clientService.getAllClients();
+        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
     }
 
     @Override

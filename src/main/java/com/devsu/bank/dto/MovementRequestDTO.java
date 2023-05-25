@@ -12,9 +12,9 @@ public class MovementRequestDTO {
     @JsonProperty("tipoMovimiento")
     private String movementType;
     @JsonProperty("saldo")
-    private String balance;
+    private Integer balance;
     @JsonProperty("valor")
-    private String value;
+    private Integer value;
     @JsonProperty("idCuenta")
     private Integer accountId;
 }

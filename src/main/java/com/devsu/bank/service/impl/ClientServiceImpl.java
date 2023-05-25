@@ -9,6 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ClientServiceImpl implements IClientService {
     @Autowired
@@ -27,6 +30,15 @@ public class ClientServiceImpl implements IClientService {
         return clientRepository.findById(idClient)
                 .map(client -> modelMapper.map(client, ClientResponseDTO.class))
                 .orElse(null);
+    }
+
+    @Override
+    public List<ClientResponseDTO> getAllClients() {
+        ModelMapper modelMapper = new ModelMapper();
+        List<Client> clientList = clientRepository.findAll();
+        return clientList.stream()
+                .map(clients -> modelMapper.map(clients, ClientResponseDTO.class))
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -24,7 +24,7 @@ public class Movements {
 
     @NotNull
     @Column(name="valor")
-    private String value;
+    private Integer value;
 
     @NotNull
     @Column(name="tipoMovimiento")
@@ -38,6 +38,6 @@ public class Movements {
     private LocalDate date;
 
     @ManyToOne
-    @JoinColumn(name = "accountId")
+    @JoinColumn(name = "idCliente")
     private Account account;
 }

@@ -6,6 +6,6 @@ import com.devsu.bank.dto.AccountResponseDTO;
 public interface IAccountService {
     AccountResponseDTO createAccount(AccountRequestDTO accountRequestDTO);
     AccountResponseDTO getAccountById(Integer accountId);
-    AccountResponseDTO patchAccount(Integer accountId, AccountRequestDTO accountRequestDTO);
+    AccountResponseDTO patchBalanceAccount(Integer accountId, AccountRequestDTO accountRequestDTO);
 
 }
