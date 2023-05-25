@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -35,4 +36,8 @@ public class Movements {
     @Column(name="fecha")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "accountId")
+    private Account account;
 }

@@ -46,7 +46,6 @@ public class ClientServiceImpl implements IClientService {
             clientResponseDTO.setName(clientRequestDTO.getName());
             clientResponseDTO.setState(clientRequestDTO.getState());
             clientResponseDTO.setPhone(clientRequestDTO.getPhone());
-            clientResponseDTO.setPassword(clientRequestDTO.getPassword());
             clientRepository.save(modelMapper.map(clientResponseDTO, Client.class));
         }
         return clientResponseDTO;

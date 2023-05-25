@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -15,9 +16,13 @@ import javax.validation.constraints.NotNull;
 @Table(name = "ACCOUNT")
 @Data
 public class Account {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     @Column(name = "numeroCuenta")
-    private Integer accountNumber;
+    private Long accountNumber;
 
     @NotNull
     @Column(name = "tipo")
@@ -30,5 +35,9 @@ public class Account {
     @NotNull
     @Column(name = "estado")
     private String state;
+
+    @ManyToOne
+    @JoinColumn(name = "clientId")
+    private Client client;
 
 }

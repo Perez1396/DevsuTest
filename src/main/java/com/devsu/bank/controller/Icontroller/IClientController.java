@@ -5,11 +5,10 @@ import com.devsu.bank.dto.ClientResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import static com.devsu.bank.utils.ClientConstants.BASE_PATH;
-import static com.devsu.bank.utils.ClientConstants.PATH_CLIENT_ID;
+import static com.devsu.bank.utils.ClientConstants.*;
 
 
-@RequestMapping(BASE_PATH)
+@RequestMapping(BASE_CLIENT_PATH)
 public interface IClientController {
 
     ResponseEntity<?> getClients();

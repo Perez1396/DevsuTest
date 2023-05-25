@@ -6,7 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ClientResponseDTO {
-    private String password;
+    private Integer id;
     private String state;
     private String name;
     private String address;
