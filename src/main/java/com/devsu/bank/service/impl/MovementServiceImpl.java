@@ -2,19 +2,24 @@ package com.devsu.bank.service.impl;
 
 import com.devsu.bank.dto.*;
 import com.devsu.bank.enums.MovementType;
-import com.devsu.bank.model.Client;
+import com.devsu.bank.exception.BankException;
 import com.devsu.bank.model.Movements;
 import com.devsu.bank.repository.MovementRepository;
 import com.devsu.bank.service.IAccountService;
 import com.devsu.bank.service.IMovementService;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.devsu.bank.utils.MovementConstants.*;
+
+@Slf4j
 @Service
 public class MovementServiceImpl implements IMovementService {
     private final static Integer MAX_AMOUNT_PER_DAY = 1000;
@@ -26,12 +31,14 @@ public class MovementServiceImpl implements IMovementService {
     IAccountService accountService;
 
     @Override
-    public MovementResponseDTO createMovement(MovementRequestDTO movementRequestDTO) {
+    public MovementResponseDTO createMovement(MovementRequestDTO movementRequestDTO) throws BankException {
+        log.info("Datos de movimiento a crear: {}", movementRequestDTO);
         AccountResponseDTO accountResponseDTO = accountService.getAccountById(movementRequestDTO.getAccountId());
         return accountResponseDTO == null ? null : addMovementToAccount(accountResponseDTO, movementRequestDTO);
     }
 
     public List<MovementResponseDTO> getAllMovementsByAccountId(Integer accountId) {
+        log.info("Id de cuenta para consultar todos los movimientos: {}", accountId);
         ModelMapper modelMapper = new ModelMapper();
         return movementRepository.findAllByAccountId(accountId)
                 .stream()
@@ -50,6 +57,7 @@ public class MovementServiceImpl implements IMovementService {
 
     @Override
     public MovementResponseDTO getMovementById(Integer movementId) {
+        log.info("Id de movimiento a consultar: {}", movementId);
         ModelMapper modelMapper = new ModelMapper();
         return movementRepository.findById(movementId)
                 .map(movement -> modelMapper.map(movement, MovementResponseDTO.class))
@@ -58,15 +66,16 @@ public class MovementServiceImpl implements IMovementService {
 
     @Override
     public void deleteMovementById(Integer movementId) {
+        log.info("Id de movimiento a ser eliminado: {}", movementId);
         MovementResponseDTO movementResponseDTO = getMovementById(movementId);
-        if (movementResponseDTO != null){
+        if (movementResponseDTO != null) {
             movementRepository.deleteById(movementId);
         }
     }
 
-    private MovementResponseDTO addMovementToAccount(AccountResponseDTO accountResponseDTO, MovementRequestDTO movementRequestDTO) {
+    private MovementResponseDTO addMovementToAccount(AccountResponseDTO accountResponseDTO, MovementRequestDTO movementRequestDTO) throws BankException {
+        log.info("Datos de cuenta para añadir los movimientos: {}, datos de movimiento a añadir: {}", accountResponseDTO, movementRequestDTO);
         ModelMapper modelMapper = new ModelMapper();
-
         calculateNewBalance(accountResponseDTO, movementRequestDTO);
         Movements movements = modelMapper.map(movementRequestDTO, Movements.class);
         movements.setDate(LocalDate.now());
@@ -75,17 +84,19 @@ public class MovementServiceImpl implements IMovementService {
         return modelMapper.map(movementRepository.save(movements), MovementResponseDTO.class);
     }
 
-    private void calculateNewBalance(AccountResponseDTO accountResponseDTO, MovementRequestDTO movementRequestDTO) {
+    private void calculateNewBalance(AccountResponseDTO accountResponseDTO, MovementRequestDTO movementRequestDTO) throws BankException {
+        log.info("Datos de cuenta para añadir los movimientos: {}, datos de movimiento a añadir: {}", accountResponseDTO, movementRequestDTO);
         int newBalance = 0;
         balanceValidator(accountResponseDTO, movementRequestDTO);
 
-        Integer maxAmount = getMaxAmountPerDay(accountResponseDTO.getMovementsList());
-        int newMaxAmount = maxAmount + movementRequestDTO.getValue();
+        Integer amountOfPreviousMovements = getMaxAmountPerDay(accountResponseDTO.getMovementsList());
+        int newMaxAmount = amountOfPreviousMovements + movementRequestDTO.getValue();
         if (movementRequestDTO.getMovementType().equals(MovementType.DEBITO.toString())) {
-            if (newMaxAmount <= MAX_AMOUNT_PER_DAY){
+            if (newMaxAmount <= MAX_AMOUNT_PER_DAY) {
                 newBalance = accountResponseDTO.getInitialBalance() - movementRequestDTO.getValue();
-            }else{
-                throw new RuntimeException(); //TODO Añadir el mensaje de cupo diario excedido
+            } else {
+                log.error(NO_BALANCE_ERROR_LOG, movementRequestDTO.getValue());
+                throw new BankException(MAX_AMOUNT_REACHED, HttpStatus.BAD_REQUEST.value());
             }
         }
         if (movementRequestDTO.getMovementType().equals(MovementType.CREDITO.toString())) {
@@ -95,20 +106,23 @@ public class MovementServiceImpl implements IMovementService {
         accountResponseDTO.setInitialBalance(newBalance);
     }
 
-    private void balanceValidator(AccountResponseDTO accountResponseDTO, MovementRequestDTO movementRequestDTO) {
+    private void balanceValidator(AccountResponseDTO accountResponseDTO, MovementRequestDTO movementRequestDTO) throws BankException {
         if (accountResponseDTO.getInitialBalance() == 0 && movementRequestDTO.getMovementType().equals(MovementType.DEBITO.toString())) {
-            throw new RuntimeException(); //TODO Añadir el mensaje de saldo no disponible idea usar un exception
+            log.error(NO_BALANCE_ERROR_LOG, movementRequestDTO.getValue());
+            throw new BankException(NO_BALANCE, HttpStatus.BAD_REQUEST.value());
         }
         if (movementRequestDTO.getMovementType().equals(MovementType.DEBITO.toString()) && movementRequestDTO.getValue() > accountResponseDTO.getInitialBalance()) {
-            throw new RuntimeException(); //TODO Añadir el mensaje de saldo no disponible idea usar un exception
+            log.error(WITHDRAWAL_ERROR_LOG, movementRequestDTO.getValue(), accountResponseDTO.getInitialBalance());
+            throw new BankException(WITHDRAWAL_EXCEDEED, HttpStatus.BAD_REQUEST.value());
         }
     }
 
-    public Integer getMaxAmountPerDay(List<MovementResponseDTO> movementResponseDTOList) {
+    private Integer getMaxAmountPerDay(List<MovementResponseDTO> movementResponseDTOList) {
+        log.info("Lista de movimientos a iterar para sumar el valor de transacciones: {}", movementResponseDTOList);
         return movementResponseDTOList
                 .stream()
                 .filter(movementResponseDTO -> movementResponseDTO.getDate().equals(LocalDate.now()))
-                .filter(movementResponseDTO -> movementResponseDTO.getMovementType().equals("debito"))
+                .filter(movementResponseDTO -> movementResponseDTO.getMovementType().equals(MovementType.DEBITO.toString()))
                 .mapToInt(MovementResponseDTO::getValue)
                 .sum();
     }

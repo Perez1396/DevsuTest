@@ -1,7 +1,6 @@
 package com.devsu.bank.dto;
 
 import com.devsu.bank.model.Client;
-import com.devsu.bank.model.Movements;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;

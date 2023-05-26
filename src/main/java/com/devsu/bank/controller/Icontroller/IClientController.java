@@ -1,14 +1,14 @@
 package com.devsu.bank.controller.Icontroller;
 
 import com.devsu.bank.dto.ClientRequestDTO;
-import com.devsu.bank.dto.ClientResponseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.devsu.bank.utils.AccountConstants.API;
 import static com.devsu.bank.utils.ClientConstants.*;
 
 
-@RequestMapping(BASE_CLIENT_PATH)
+@RequestMapping(API)
 public interface IClientController {
 
     ResponseEntity<?> getClients();

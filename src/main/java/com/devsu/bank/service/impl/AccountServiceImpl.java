@@ -2,10 +2,8 @@ package com.devsu.bank.service.impl;
 
 import com.devsu.bank.dto.AccountRequestDTO;
 import com.devsu.bank.dto.AccountResponseDTO;
-import com.devsu.bank.dto.MovementResponseDTO;
 import com.devsu.bank.model.Account;
 import com.devsu.bank.model.Client;
-import com.devsu.bank.model.Movements;
 import com.devsu.bank.repository.AccountRepository;
 import com.devsu.bank.service.IAccountService;
 import com.devsu.bank.service.IClientService;
