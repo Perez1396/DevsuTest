@@ -2,12 +2,15 @@ package com.devsu.bank.service.impl;
 
 import com.devsu.bank.dto.AccountRequestDTO;
 import com.devsu.bank.dto.AccountResponseDTO;
+import com.devsu.bank.dto.ReportResponseDTO;
+import com.devsu.bank.mapper.ReportMapper;
 import com.devsu.bank.model.Account;
 import com.devsu.bank.model.Client;
 import com.devsu.bank.repository.AccountRepository;
 import com.devsu.bank.service.IAccountService;
 import com.devsu.bank.service.IClientService;
 import com.devsu.bank.service.IMovementService;
+import io.swagger.models.auth.In;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,5 +76,27 @@ public class AccountServiceImpl implements IAccountService {
             accountRepository.save(modelMapper.map(accountResponseDTO, Account.class));
         }
         return accountResponseDTO;
+    }
+
+    @Override
+    public List<ReportResponseDTO> getAccountsForReport(Integer clientId, List<String> dateRange) {
+        List<AccountResponseDTO> accountResponseDTOList = getAccountsByClientId(clientId);
+        addMovementsToEachAccount(accountResponseDTOList);
+        return ReportMapper.mapFromAccountResponseToReport(accountResponseDTOList, dateRange);
+    }
+
+    private void addMovementsToEachAccount(List<AccountResponseDTO> accountResponseDTOList) {
+        accountResponseDTOList
+                .forEach(accountResponseDTO ->
+                        accountResponseDTO.setMovementsList(movementService.getAllMovementsByAccountId(accountResponseDTO.getId())));
+    }
+
+
+    private List<AccountResponseDTO> getAccountsByClientId(Integer clientId) {
+        ModelMapper modelMapper = new ModelMapper();
+        List<Account> movementsList = accountRepository.findAllByClientId(clientId);
+        return movementsList.stream()
+                .map(accounts -> modelMapper.map(accounts, AccountResponseDTO.class))
+                .collect(Collectors.toList());
     }
 }
