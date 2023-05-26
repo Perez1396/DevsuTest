@@ -11,4 +11,8 @@ public interface IAccountController {
 
     ResponseEntity<?> createAccount(AccountRequestDTO accountRequestDTO);
     ResponseEntity<?> getAccountById(Integer accountId);
+    ResponseEntity<?> getAllAccounts();
+    ResponseEntity<?> deleteAccountByID(Integer accountId);
+
+
 }

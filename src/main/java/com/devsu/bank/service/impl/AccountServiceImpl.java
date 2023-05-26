@@ -2,7 +2,7 @@ package com.devsu.bank.service.impl;
 
 import com.devsu.bank.dto.AccountRequestDTO;
 import com.devsu.bank.dto.AccountResponseDTO;
-import com.devsu.bank.dto.ClientResponseDTO;
+import com.devsu.bank.dto.MovementResponseDTO;
 import com.devsu.bank.model.Account;
 import com.devsu.bank.model.Client;
 import com.devsu.bank.model.Movements;
@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements IAccountService {
@@ -49,10 +50,27 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
+    public List<AccountResponseDTO> getAllAccounts() {
+        ModelMapper modelMapper = new ModelMapper();
+        List<Account> movementsList = accountRepository.findAll();
+        return movementsList.stream()
+                .map(accounts -> modelMapper.map(accounts, AccountResponseDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public void deleteAccountById(Integer accountId) {
+        AccountResponseDTO accountResponseDTO = getAccountById(accountId);
+        if (accountResponseDTO != null) {
+            accountRepository.deleteById(accountId);
+        }
+    }
+
+    @Override
     public AccountResponseDTO patchBalanceAccount(Integer accountId, AccountRequestDTO accountRequestDTO) {
         ModelMapper modelMapper = new ModelMapper();
         AccountResponseDTO accountResponseDTO = getAccountById(accountId);
-        if (accountResponseDTO != null){
+        if (accountResponseDTO != null) {
             accountResponseDTO.setInitialBalance(accountRequestDTO.getInitialBalance());
             accountRepository.save(modelMapper.map(accountResponseDTO, Account.class));
         }

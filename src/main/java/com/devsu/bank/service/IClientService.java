@@ -13,4 +13,5 @@ public interface IClientService {
     List<ClientResponseDTO> getAllClients();
     void deleteClientByID(Integer idClient);
     ClientResponseDTO patchClient(Integer idClient, ClientRequestDTO clientRequestDTO);
+    ClientResponseDTO putClient(Integer idClient, ClientRequestDTO clientRequestDTO);
 }

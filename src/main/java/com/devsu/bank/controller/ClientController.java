@@ -51,7 +51,8 @@ public class ClientController implements IClientController {
     @Override
     @PutMapping(PATH_CLIENT_ID)
     public ResponseEntity<?> putClient (@PathVariable Integer idClient, @RequestBody ClientRequestDTO clientRequestDTO) {
-        return null;
+        ClientResponseDTO clientResponseDTO = clientService.putClient(idClient, clientRequestDTO);
+        return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
     }
 
     @Override

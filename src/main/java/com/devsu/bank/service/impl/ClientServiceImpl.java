@@ -50,7 +50,7 @@ public class ClientServiceImpl implements IClientService {
     }
 
     @Override
-    public ClientResponseDTO patchClient(Integer idClient, ClientRequestDTO clientRequestDTO) {
+    public ClientResponseDTO putClient(Integer idClient, ClientRequestDTO clientRequestDTO) {
         ModelMapper modelMapper = new ModelMapper();
         ClientResponseDTO clientResponseDTO = getClientById(idClient);
         if (clientResponseDTO != null){
@@ -58,6 +58,17 @@ public class ClientServiceImpl implements IClientService {
             clientResponseDTO.setName(clientRequestDTO.getName());
             clientResponseDTO.setState(clientRequestDTO.getState());
             clientResponseDTO.setPhone(clientRequestDTO.getPhone());
+            clientRepository.save(modelMapper.map(clientResponseDTO, Client.class));
+        }
+        return clientResponseDTO;
+    }
+
+    @Override
+    public ClientResponseDTO patchClient(Integer idClient, ClientRequestDTO clientRequestDTO) {
+        ModelMapper modelMapper = new ModelMapper();
+        ClientResponseDTO clientResponseDTO = getClientById(idClient);
+        if (clientResponseDTO != null){
+            clientResponseDTO.setPassword(clientRequestDTO.getPassword());
             clientRepository.save(modelMapper.map(clientResponseDTO, Client.class));
         }
         return clientResponseDTO;

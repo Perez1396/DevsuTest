@@ -5,9 +5,11 @@ import com.devsu.bank.model.Movements;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
 public interface MovementRepository extends JpaRepository<Movements,Integer> {
     List<Movements> findAllByAccountId(Integer accountId);
+    List<Movements> findAllByDate(LocalDate date);
 }

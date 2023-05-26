@@ -9,5 +9,7 @@ import static com.devsu.bank.utils.MovementConstants.BASE_MOVEMENT_PATH;
 @RequestMapping(BASE_MOVEMENT_PATH)
 public interface IMovementController {
     ResponseEntity<?> createMovement(MovementRequestDTO movementRequestDTO);
-    ResponseEntity<?> getAllMovementsByAccountId(Integer accountId);
+    ResponseEntity<?> getAllMovements();
+    ResponseEntity<?> getMovementById(Integer movementId);
+    ResponseEntity<?> deleteMovementByID(Integer movementId);
 }
