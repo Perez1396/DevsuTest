@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -36,8 +38,9 @@ public class Movements {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate date;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idCuenta")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Account account;
 
     @Override

@@ -4,7 +4,7 @@ import com.devsu.bank.dto.ClientRequestDTO;
 import com.devsu.bank.dto.ClientResponseDTO;
 import com.devsu.bank.model.Client;
 import com.devsu.bank.repository.ClientRepository;
-import com.devsu.bank.testUtils.ClientHelper;
+import com.devsu.bank.testUtils.BankHelper;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -42,9 +41,9 @@ class ClientServiceImplTest {
 
     @Test
     void testCreateClientSuccess()  {
-        ClientRequestDTO clientRequestDTO = ClientHelper.createClientRequest();
-        Client client = ClientHelper.createClient();
-        ClientResponseDTO clientResponseDTO = ClientHelper.createClientResponse();
+        ClientRequestDTO clientRequestDTO = BankHelper.createClientRequest();
+        Client client = BankHelper.createClient();
+        ClientResponseDTO clientResponseDTO = BankHelper.createClientResponse();
         when(modelMapper.map(clientRequestDTO, Client.class)).thenReturn(client);
         when(clientRepository.save(ArgumentMatchers.any(Client.class))).thenReturn(client);
         when(modelMapper.map(client, ClientResponseDTO.class)).thenReturn(clientResponseDTO);
@@ -55,8 +54,8 @@ class ClientServiceImplTest {
 
     @Test
     void testGetClientByID() {
-        ClientResponseDTO clientResponseDTO = ClientHelper.createClientResponse();
-        Client client = ClientHelper.createClient();
+        ClientResponseDTO clientResponseDTO = BankHelper.createClientResponse();
+        Client client = BankHelper.createClient();
         when(clientRepository.findById(1)).thenReturn(Optional.of(client));
         when(modelMapper.map(client, ClientResponseDTO.class)).thenReturn(clientResponseDTO);
         ClientResponseDTO response = clientService.getClientById(1);
@@ -67,9 +66,9 @@ class ClientServiceImplTest {
     @Test
     void testGetAllClients() {
         List<ClientResponseDTO> clientResponseDTOList = new ArrayList<>();
-        ClientResponseDTO clientResponseDTO = ClientHelper.createClientResponse();
+        ClientResponseDTO clientResponseDTO = BankHelper.createClientResponse();
         clientResponseDTOList.add(clientResponseDTO);
-        Client client = ClientHelper.createClient();
+        Client client = BankHelper.createClient();
         List<Client> clients = new ArrayList<>();
         clients.add(client);
         when(clientRepository.findAll()).thenReturn(clients);
@@ -81,8 +80,8 @@ class ClientServiceImplTest {
 
     @Test
     void testDeleteClientByID() {
-        ClientResponseDTO clientResponseDTO = ClientHelper.createClientResponse();
-        Client client = ClientHelper.createClient();
+        ClientResponseDTO clientResponseDTO = BankHelper.createClientResponse();
+        Client client = BankHelper.createClient();
         when(clientRepository.findById(1)).thenReturn(Optional.of(client));
         when(modelMapper.map(client, ClientResponseDTO.class)).thenReturn(clientResponseDTO);
         clientService.deleteClientByID(client.getId());
@@ -91,9 +90,9 @@ class ClientServiceImplTest {
 
     @Test
     void testPutClientByID() {
-        ClientRequestDTO clientRequestDTO = ClientHelper.createClientRequest();
-        ClientResponseDTO clientResponseDTO = ClientHelper.createClientResponse();
-        Client client = ClientHelper.createClient();
+        ClientRequestDTO clientRequestDTO = BankHelper.createClientRequest();
+        ClientResponseDTO clientResponseDTO = BankHelper.createClientResponse();
+        Client client = BankHelper.createClient();
         when(clientRepository.findById(1)).thenReturn(Optional.of(client));
         when(modelMapper.map(client, ClientResponseDTO.class)).thenReturn(clientResponseDTO);
         when(clientRepository.save(ArgumentMatchers.any(Client.class))).thenReturn(client);
@@ -105,9 +104,9 @@ class ClientServiceImplTest {
 
     @Test
     void testPatchClientByID() {
-        ClientRequestDTO clientRequestDTO = ClientHelper.createClientRequest();
-        ClientResponseDTO clientResponseDTO = ClientHelper.createClientResponse();
-        Client client = ClientHelper.createClient();
+        ClientRequestDTO clientRequestDTO = BankHelper.createClientRequest();
+        ClientResponseDTO clientResponseDTO = BankHelper.createClientResponse();
+        Client client = BankHelper.createClient();
         when(clientRepository.findById(1)).thenReturn(Optional.of(client));
         when(modelMapper.map(client, ClientResponseDTO.class)).thenReturn(clientResponseDTO);
         when(clientRepository.save(ArgumentMatchers.any(Client.class))).thenReturn(client);

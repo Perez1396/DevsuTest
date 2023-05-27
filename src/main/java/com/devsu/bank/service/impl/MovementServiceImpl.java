@@ -38,7 +38,7 @@ public class MovementServiceImpl implements IMovementService {
     }
 
     public List<MovementResponseDTO> getAllMovementsByAccountId(Integer accountId) {
-        log.info("Id account to retrieve {}", accountId);
+        log.info("Id account to retrieve the movements associated: {}", accountId);
         ModelMapper modelMapper = new ModelMapper();
         return movementRepository.findAllByAccountId(accountId)
                 .stream()

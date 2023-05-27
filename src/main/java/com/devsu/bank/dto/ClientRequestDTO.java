@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Max;
+
 @Getter
 @Setter
 public class ClientRequestDTO {
@@ -17,6 +19,7 @@ public class ClientRequestDTO {
     @JsonProperty("genero")
     private String gender;
     @JsonProperty("edad")
+    @Max(100)
     private Integer age;
     @JsonProperty("direccion")
     private String address;

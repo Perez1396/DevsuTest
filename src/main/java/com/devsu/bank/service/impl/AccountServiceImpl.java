@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.devsu.bank.utils.AccountConstants.NO_RECORDS_FOUND;
-import static com.devsu.bank.utils.MovementConstants.MAX_AMOUNT_REACHED;
 
 @Slf4j
 @Service
@@ -68,7 +67,11 @@ public class AccountServiceImpl implements IAccountService {
         ModelMapper modelMapper = new ModelMapper();
         List<Account> movementsList = accountRepository.findAll();
         return movementsList.stream()
-                .map(accounts -> modelMapper.map(accounts, AccountResponseDTO.class))
+                .map(accounts -> {
+                    AccountResponseDTO accountResponseDTO = modelMapper.map(accounts, AccountResponseDTO.class);
+                    accountResponseDTO.setMovementsList(movementService.getAllMovementsByAccountId(accounts.getId()));
+                    return accountResponseDTO;
+                })
                 .collect(Collectors.toList());
     }
 
