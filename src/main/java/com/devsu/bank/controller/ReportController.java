@@ -25,7 +25,7 @@ public class ReportController implements IReportController {
     @Override
     @GetMapping(BASE_REPORT_PATH + PATH_CLIENT_ID)
     public ResponseEntity<?> getReportByClientAndDates(@PathVariable Integer idClient,
-                                                       @RequestParam(value = "fecha", required = false) List<String> dateRange) {
+                                                       @RequestParam(value = "fecha", required = true) List<String> dateRange) {
         List<ReportResponseDTO> reportResponseDTOList = accountService.getAccountsForReport(idClient, dateRange);
         return new ResponseEntity<>(reportResponseDTOList, HttpStatus.OK);
     }

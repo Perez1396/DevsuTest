@@ -4,6 +4,7 @@ import com.devsu.bank.controller.Icontroller.IClientController;
 import com.devsu.bank.dto.ClientRequestDTO;
 import com.devsu.bank.dto.ClientResponseDTO;
 import com.devsu.bank.service.IClientService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static com.devsu.bank.utils.ClientConstants.*;
 
+@Slf4j
 @RestController
 public class ClientController implements IClientController {
 
@@ -23,6 +25,7 @@ public class ClientController implements IClientController {
     @GetMapping(BASE_CLIENT_PATH)
     public ResponseEntity<?> getClients() {
         List<ClientResponseDTO> clientResponseDTO = clientService.getAllClients();
+        log.info("List of clients: {}", clientResponseDTO.toString());
         return new ResponseEntity<>(clientResponseDTO, HttpStatus.OK);
     }
 

@@ -15,4 +15,14 @@ public class MovementRequestDTO {
     private Integer value;
     @JsonProperty("idCuenta")
     private Integer accountId;
+
+    @Override
+    public String toString() {
+        return "MovementRequestDTO{" +
+                "movementType='" + movementType + '\'' +
+                ", balance=" + balance +
+                ", value=" + value +
+                ", accountId=" + accountId +
+                '}';
+    }
 }

@@ -22,4 +22,18 @@ public class ClientResponseDTO {
     private String address;
     @JsonProperty("telefono")
     private String phone;
+
+    @Override
+    public String toString() {
+        return "ClientResponseDTO{" +
+                "id=" + id +
+                ", password='" + password + '\'' +
+                ", state='" + state + '\'' +
+                ", name='" + name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", age=" + age +
+                ", address='" + address + '\'' +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }

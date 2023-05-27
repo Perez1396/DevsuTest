@@ -32,13 +32,13 @@ public class MovementServiceImpl implements IMovementService {
 
     @Override
     public MovementResponseDTO createMovement(MovementRequestDTO movementRequestDTO) throws BankException {
-        log.info("Datos de movimiento a crear: {}", movementRequestDTO);
+        log.info("DTO object that will be mapped into a movement entity: {}", movementRequestDTO.toString());
         AccountResponseDTO accountResponseDTO = accountService.getAccountById(movementRequestDTO.getAccountId());
         return accountResponseDTO == null ? null : addMovementToAccount(accountResponseDTO, movementRequestDTO);
     }
 
     public List<MovementResponseDTO> getAllMovementsByAccountId(Integer accountId) {
-        log.info("Id de cuenta para consultar todos los movimientos: {}", accountId);
+        log.info("Id account to retrieve {}", accountId);
         ModelMapper modelMapper = new ModelMapper();
         return movementRepository.findAllByAccountId(accountId)
                 .stream()
@@ -57,7 +57,7 @@ public class MovementServiceImpl implements IMovementService {
 
     @Override
     public MovementResponseDTO getMovementById(Integer movementId) {
-        log.info("Id de movimiento a consultar: {}", movementId);
+        log.info("Id movement to retrieve: {}", movementId);
         ModelMapper modelMapper = new ModelMapper();
         return movementRepository.findById(movementId)
                 .map(movement -> modelMapper.map(movement, MovementResponseDTO.class))
@@ -66,7 +66,7 @@ public class MovementServiceImpl implements IMovementService {
 
     @Override
     public void deleteMovementById(Integer movementId) {
-        log.info("Id de movimiento a ser eliminado: {}", movementId);
+        log.info("Id movement to delete: {}", movementId);
         MovementResponseDTO movementResponseDTO = getMovementById(movementId);
         if (movementResponseDTO != null) {
             movementRepository.deleteById(movementId);
@@ -74,7 +74,7 @@ public class MovementServiceImpl implements IMovementService {
     }
 
     private MovementResponseDTO addMovementToAccount(AccountResponseDTO accountResponseDTO, MovementRequestDTO movementRequestDTO) throws BankException {
-        log.info("Datos de cuenta para añadir los movimientos: {}, datos de movimiento a añadir: {}", accountResponseDTO, movementRequestDTO);
+        log.info("Account data where the movements will be added: {}, movement data: {}", accountResponseDTO.toString(), movementRequestDTO.toString());
         ModelMapper modelMapper = new ModelMapper();
         calculateNewBalance(accountResponseDTO, movementRequestDTO);
         Movements movements = modelMapper.map(movementRequestDTO, Movements.class);
@@ -85,19 +85,18 @@ public class MovementServiceImpl implements IMovementService {
     }
 
     private void calculateNewBalance(AccountResponseDTO accountResponseDTO, MovementRequestDTO movementRequestDTO) throws BankException {
-        log.info("Datos de cuenta para añadir los movimientos: {}, datos de movimiento a añadir: {}", accountResponseDTO, movementRequestDTO);
         int newBalance = 0;
         balanceValidator(accountResponseDTO, movementRequestDTO);
 
         Integer amountOfPreviousMovements = getMaxAmountPerDay(accountResponseDTO.getMovementsList());
         int newMaxAmount = amountOfPreviousMovements + movementRequestDTO.getValue();
+        log.info("newMaxAmount to compare with the max amount per day: {}", newMaxAmount);
         if (movementRequestDTO.getMovementType().equals(MovementType.DEBITO.toString())) {
-            if (newMaxAmount <= MAX_AMOUNT_PER_DAY) {
-                newBalance = accountResponseDTO.getInitialBalance() - movementRequestDTO.getValue();
-            } else {
+            if (newMaxAmount > MAX_AMOUNT_PER_DAY) {
                 log.error(NO_BALANCE_ERROR_LOG, movementRequestDTO.getValue());
                 throw new BankException(MAX_AMOUNT_REACHED, HttpStatus.BAD_REQUEST.value());
             }
+            newBalance = accountResponseDTO.getInitialBalance() - movementRequestDTO.getValue();
         }
         if (movementRequestDTO.getMovementType().equals(MovementType.CREDITO.toString())) {
             newBalance = accountResponseDTO.getInitialBalance() + movementRequestDTO.getValue();
@@ -118,7 +117,7 @@ public class MovementServiceImpl implements IMovementService {
     }
 
     private Integer getMaxAmountPerDay(List<MovementResponseDTO> movementResponseDTOList) {
-        log.info("Lista de movimientos a iterar para sumar el valor de transacciones: {}", movementResponseDTOList);
+        log.info("List of the movements: {}", movementResponseDTOList.toString());
         return movementResponseDTOList
                 .stream()
                 .filter(movementResponseDTO -> movementResponseDTO.getDate().equals(LocalDate.now()))

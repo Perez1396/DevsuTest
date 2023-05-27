@@ -20,4 +20,15 @@ public class MovementResponseDTO {
     @JsonProperty("fecha")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate date;
+
+    @Override
+    public String toString() {
+        return "MovementResponseDTO{" +
+                "id=" + id +
+                ", movementType='" + movementType + '\'' +
+                ", balance=" + balance +
+                ", value=" + value +
+                ", date=" + date +
+                '}';
+    }
 }

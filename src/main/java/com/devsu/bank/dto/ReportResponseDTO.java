@@ -29,4 +29,17 @@ public class ReportResponseDTO {
     private Integer balance;
 
 
+    @Override
+    public String toString() {
+        return "ReportResponseDTO{" +
+                "date=" + date +
+                ", name='" + name + '\'' +
+                ", accountNumber=" + accountNumber +
+                ", accountType='" + accountType + '\'' +
+                ", initialBalance=" + initialBalance +
+                ", state='" + state + '\'' +
+                ", movimiento='" + movimiento + '\'' +
+                ", balance=" + balance +
+                '}';
+    }
 }

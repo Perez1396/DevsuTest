@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -40,4 +39,16 @@ public class Movements {
     @ManyToOne
     @JoinColumn(name = "idCuenta")
     private Account account;
+
+    @Override
+    public String toString() {
+        return "Movements{" +
+                "id=" + id +
+                ", value=" + value +
+                ", movementType='" + movementType + '\'' +
+                ", balance=" + balance +
+                ", date=" + date +
+                ", account=" + account +
+                '}';
+    }
 }

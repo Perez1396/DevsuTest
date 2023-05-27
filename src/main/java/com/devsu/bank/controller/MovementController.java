@@ -5,6 +5,7 @@ import com.devsu.bank.dto.MovementRequestDTO;
 import com.devsu.bank.dto.MovementResponseDTO;
 import com.devsu.bank.exception.BankException;
 import com.devsu.bank.service.IMovementService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import static com.devsu.bank.utils.ClientConstants.NO_RECORDS_FOUND;
 import static com.devsu.bank.utils.MovementConstants.BASE_MOVEMENT_PATH;
 import static com.devsu.bank.utils.MovementConstants.PATH_MOVEMENT_ID;
 
+@Slf4j
 @RestController
 public class MovementController implements IMovementController {
 
@@ -33,6 +35,7 @@ public class MovementController implements IMovementController {
     @GetMapping(BASE_MOVEMENT_PATH)
     public ResponseEntity<?> getAllMovements() {
         List<MovementResponseDTO> movementResponseDTOList = movementService.getAllMovements();
+        log.info("List of movements: {}", movementResponseDTOList.toString());
         return new ResponseEntity<>(movementResponseDTOList, HttpStatus.OK);
     }
 

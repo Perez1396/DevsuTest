@@ -17,4 +17,15 @@ public class AccountRequestDTO {
     private String state;
     @JsonProperty("clienteId")
     private Integer clientId;
+
+    @Override
+    public String toString() {
+        return "AccountRequestDTO{" +
+                "accountNumber=" + accountNumber +
+                ", accountType='" + accountType + '\'' +
+                ", initialBalance=" + initialBalance +
+                ", state='" + state + '\'' +
+                ", clientId=" + clientId +
+                '}';
+    }
 }

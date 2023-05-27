@@ -42,4 +42,15 @@ public class Account {
     @JoinColumn(name = "clienteId")
     private Client client;
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", accountNumber=" + accountNumber +
+                ", accountType='" + accountType + '\'' +
+                ", initialBalance=" + initialBalance +
+                ", state='" + state + '\'' +
+                ", client=" + client +
+                '}';
+    }
 }

@@ -3,7 +3,9 @@ package com.devsu.bank.controller;
 import com.devsu.bank.controller.Icontroller.IAccountController;
 import com.devsu.bank.dto.AccountRequestDTO;
 import com.devsu.bank.dto.AccountResponseDTO;
+import com.devsu.bank.exception.BankException;
 import com.devsu.bank.service.IAccountService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +17,7 @@ import static com.devsu.bank.utils.AccountConstants.BASE_ACCOUNT_PATH;
 import static com.devsu.bank.utils.AccountConstants.PATH_ACCOUNT_ID;
 import static com.devsu.bank.utils.ClientConstants.NO_RECORDS_FOUND;
 
+@Slf4j
 @RestController
 public class AccountController implements IAccountController {
 
@@ -23,7 +26,7 @@ public class AccountController implements IAccountController {
 
     @Override
     @PostMapping(BASE_ACCOUNT_PATH)
-    public ResponseEntity<?> createAccount(@RequestBody AccountRequestDTO accountRequestDTO) {
+    public ResponseEntity<?> createAccount(@RequestBody AccountRequestDTO accountRequestDTO) throws BankException {
         AccountResponseDTO accountResponseDTO = accountService.createAccount(accountRequestDTO);
         return new ResponseEntity<>(accountResponseDTO, HttpStatus.CREATED);
     }
@@ -32,16 +35,14 @@ public class AccountController implements IAccountController {
     @GetMapping(BASE_ACCOUNT_PATH + PATH_ACCOUNT_ID)
     public ResponseEntity<?> getAccountById(@PathVariable Integer accountId) {
         AccountResponseDTO accountResponseDTO = accountService.getAccountById(accountId);
-        if (accountResponseDTO == null) {
-            return new ResponseEntity<>(NO_RECORDS_FOUND, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(accountResponseDTO, HttpStatus.OK);
+        return accountResponseDTO == null ? ResponseEntity.status(HttpStatus.NOT_FOUND).body(NO_RECORDS_FOUND) : ResponseEntity.ok(accountResponseDTO);
     }
 
     @Override
     @GetMapping(BASE_ACCOUNT_PATH)
     public ResponseEntity<?> getAllAccounts() {
         List<AccountResponseDTO> accountResponseDTO = accountService.getAllAccounts();
+        log.info("List of accounts: {}", accountResponseDTO.toString());
         return new ResponseEntity<>(accountResponseDTO, HttpStatus.OK);
     }
 

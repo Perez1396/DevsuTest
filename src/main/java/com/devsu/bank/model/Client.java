@@ -20,10 +20,19 @@ public class Client extends Person{
     private Integer id;
 
     @NotNull
-    @Column(name = "contraseña")
+    @Column(name = "contrasena")
     private String password;
 
     @NotNull
     @Column(name = "estado")
     private String state;
+
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", password='" + password + '\'' +
+                ", state='" + state + '\'' +
+                '}';
+    }
 }

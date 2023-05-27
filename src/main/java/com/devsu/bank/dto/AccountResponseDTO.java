@@ -23,4 +23,17 @@ public class AccountResponseDTO {
     private Client client;
     @JsonProperty("movimientos")
     private List<MovementResponseDTO> movementsList;
+
+    @Override
+    public String toString() {
+        return "AccountResponseDTO{" +
+                "id=" + id +
+                ", accountNumber=" + accountNumber +
+                ", accountType='" + accountType + '\'' +
+                ", initialBalance=" + initialBalance +
+                ", state='" + state + '\'' +
+                ", client=" + client +
+                ", movementsList=" + movementsList +
+                '}';
+    }
 }
